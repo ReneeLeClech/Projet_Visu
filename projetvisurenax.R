@@ -25,27 +25,27 @@ elnino$Sea.Surface.Temp<- as.numeric(elnino$Sea.Surface.Temp)
 str(elnino)
 
 # DATA TEMPERATURE
-temp <- read.csv("C:/Users/renax/Desktop/ACO/S9/Visualisation/Projet_Visu/Data/lima_temp.csv", sep=";")
+temp <- read.csv("C:/Users/renax/Desktop/ACO/S9/Visualisation/Projet_Visu/Data/lima_temp.csv", sep=";", na.strings = 999.9)
 
 
 #-------- premiers plots exploratoires nuls ---------
 
-# graph de la tempÃ©rature de l'eau
-elnino_Eau <- elnino%>% group_by(Year) %>% 
-  summarise(EauTemp_mean=mean(Sea.Surface.Temp,na.rm=T),
-            )
+# graph de la temperature de l'eau
+Temp_19602020 <- temp%>% filter((year <2021) &(year>1959) )
 
-plot2<- ggplot(data=elnino_Eau, aes(x=Year, y=EauTemp_mean))+
+plot1<- ggplot(data=Plot_Temp, aes(x=year, y=meanyear))+
   geom_point()+
   geom_line()+
   theme_minimal()
 
 # graph des peches de poisson
-Fish <- fisherie_capture%>% filter((Year <1999) &(Year>1979) ) %>% group_by(Year)%>% 
+Fish_19602020 <- fisherie_capture %>%
+  filter(Year <2021) %>%
+  group_by(Year)%>% 
   summarise(Fish=mean(Fish_Capture_in_T,na.rm=T),
   )
 
-plot3 <- ggplot(data=Fish, aes(x=Year, y=Fish))+
+plot2 <- ggplot(data=Fish, aes(x=Year, y=Fish))+
   geom_point()+
   geom_line()+
   theme_minimal()
@@ -54,11 +54,15 @@ plot3 <- ggplot(data=Fish, aes(x=Year, y=Fish))+
 # Convertir les graphiques en objets grob
 plot1 <- ggplotGrob(plot1)
 plot2 <- ggplotGrob(plot2)
-plot3 <- ggplotGrob(plot3)
 
 
 # Organiser les graphiques en utilisant grid.arrange
-arrange_plots <- grid.arrange(plot2, plot3)
+arrange_plots <- grid.arrange(plot1, plot2)
+
+
+####------ idem avec les gp+raph centrés/ réduits:
+
+C_Fish_19602020<- as.data.frame(scale(Fish_19602020$Fish))
 
 ##"-------
 # recherche sur le plancton:
