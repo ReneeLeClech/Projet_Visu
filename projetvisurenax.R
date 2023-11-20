@@ -3,7 +3,7 @@ library(ggplot2)
 library(tidyverse)
 library(gridExtra)
 
-
+## DATA PECHE
 # importation des données sur les peches au pérou
 fisherie_capture <- read.csv("C:/Users/renax/Desktop/ACO/S9/Visualisation/Projet_Visu/Data/fisherie_capture.csv", sep=";", header=FALSE)
 # on retourne le data frame
@@ -13,6 +13,7 @@ colnames(fisherie_capture)<- c("Year","Fish_Capture_in_T")
 fisherie_capture$Fish_Capture_in_T<-as.numeric(fisherie_capture$Fish_Capture_in_T)
 fisherie_capture$Year<-as.numeric(fisherie_capture$Year)
 
+##DATA ELNINO
 # importation des données météo du phénomène el nino
 elnino <- read.csv("C:/Users/renax/Desktop/ACO/S9/Visualisation/Projet_Visu/Data/elnino.csv", sep=";")
 elnino$Zonal.Winds<- as.numeric(elnino$Zonal.Winds)
@@ -22,6 +23,10 @@ elnino$Air.Temp<- as.numeric(elnino$Air.Temp)
 elnino$Sea.Surface.Temp<- as.numeric(elnino$Sea.Surface.Temp)
 
 str(elnino)
+
+# DATA TEMPERATURE
+temp <- read.csv("C:/Users/renax/Desktop/ACO/S9/Visualisation/Projet_Visu/Data/lima_temp.csv", sep=";")
+
 
 #-------- premiers plots exploratoires nuls ---------
 
@@ -54,4 +59,13 @@ plot3 <- ggplotGrob(plot3)
 
 # Organiser les graphiques en utilisant grid.arrange
 arrange_plots <- grid.arrange(plot2, plot3)
+
+##"-------
+# recherche sur le plancton:
+
+a<-load("C:/Users/renax/Desktop/ACO/S9/Visualisation/Projet_Visu/RDATAplantontemp/peru.RData")
+ls()
+a
+
+
 
