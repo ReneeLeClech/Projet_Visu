@@ -10,43 +10,61 @@ fisherie_capture <- read.csv("C:/Users/renax/Desktop/ACO/S9/Visualisation/Projet
 # on retourne le data frame
 fisherie_capture<- as.data.frame(t(fisherie_capture))
 fisherie_capture<- fisherie_capture[-c(1:4),]
-colnames(fisherie_capture)<- c("year","Fish_Capture_in_T")
-fisherie_capture$Fish_Capture_in_T<-as.numeric(fisherie_capture$Fish_Capture_in_T)
+colnames(fisherie_capture)<- c("year","fish")
+fisherie_capture$fish<-as.numeric(fisherie_capture$fish)
 fisherie_capture$year<-as.numeric(fisherie_capture$year)
 
-##DATA ELNINO
-# importation des donnÃ©es mÃ©tÃ©o du phÃ©nomÃ¨ne el nino
-elnino <- read.csv("C:/Users/renax/Desktop/ACO/S9/Visualisation/Projet_Visu/Data/elnino.csv", sep=";")
-elnino$Zonal.Winds<- as.numeric(elnino$Zonal.Winds)
-elnino$Meridional.Winds<- as.numeric(elnino$Meridional.Winds)
-elnino$Humidity<- as.numeric(elnino$Humidity)
-elnino$Air.Temp<- as.numeric(elnino$Air.Temp)
-elnino$Sea.Surface.Temp<- as.numeric(elnino$Sea.Surface.Temp)
-
-str(elnino)
 
 # DATA TEMPERATURE
 temp <- read.csv("C:/Users/renax/Desktop/ACO/S9/Visualisation/Projet_Visu/Data/lima_temp.csv", sep=";", na.strings = 999.9)
 
+#DATA CHLORPHYLLE
+chlA <- read.csv("C:/Users/renax/Desktop/ACO/S9/Visualisation/Projet_Visu/Data/chlorophyl_a.csv", sep=",") 
+
+# DATA ENSEMBLE
+
+# Fish_19602020$Fish_centre<- as.data.frame(scale(Fish_19602020$Fish))
+# Temp_19602020$Temp_year_centre<- as.data.frame(scale(Temp_19602020$meanyear))
+str(fisherie_capture)
+str(temp)
+str(chlA)
+
+# # Merge first pair of data frames
+# merge1 <- merge(fisherie_capture, temp[, c("year", "meanyear")], by = 'year')
+# 
+# # Merge the result with the third data frame
+# fulltab <- merge(merge1, chlA[, c("year", "chlo.a", "Cat")], by = 'year')
+# colnames(fulltab)
+# colnames(fulltab)<- c("year"  ,   "fish"   ,  "T_meanyear", "chlo.a"  , "Cat" )
+# # data_centre<- data.table::as.data.table(data_centre)
+# data_centre<- as.data.frame(data_centre)
+# write.table(fulltab,file="C:/Users/renax/Desktop/ACO/S9/Visualisation/Projet_Visu/Data/FULLTAB.csv")
+#colnames(ninocentre)<- c("year", 'fish','temp')
+
+fulltab<- read.table("C:/Users/renax/Desktop/ACO/S9/Visualisation/Projet_Visu/Data/FULLTAB.csv")
 
 #-------- premiers plots exploratoires nuls ---------
 
 # graph de la temperature de l'eau
-Temp_19602020 <- temp%>% filter((year <2021) &(year>1959) )
-
-plot1<- ggplot(data=Temp_19602020, aes(x=year, y=meanyear))+
+plot1<- fulltab%>%
+  filter(year <2021) %>% 
+  ggplot(aes(x=year, y=T_meanyear))+
   geom_point()+
   geom_line()+
   theme_minimal()
 
 # graph des peches de poisson
-Fish_19602020 <- fisherie_capture %>%
-  filter(year <2021) %>%
-  group_by(year)%>% 
-  summarise(Fish=mean(Fish_Capture_in_T,na.rm=T),
-  )
+plot2<- fulltab %>%
+  filter(year <2021) %>% 
+  ggplot(aes(x=year, y=fish))+
+  geom_point()+
+  geom_line()+
+  theme_minimal()
 
-plot2 <- ggplot(data=Fish_19602020, aes(x=year, y=Fish))+
+# graph chlorophyle a en fontion du temps
+plot3<- fulltab %>%  
+  filter(year <2021) %>% 
+  ggplot(aes(x=year, y=chlo.a))+
   geom_point()+
   geom_line()+
   theme_minimal()
@@ -55,35 +73,60 @@ plot2 <- ggplot(data=Fish_19602020, aes(x=year, y=Fish))+
 # Convertir les graphiques en objets grob
 plot1 <- ggplotGrob(plot1)
 plot2 <- ggplotGrob(plot2)
-
+plot3 <- ggplotGrob(plot3)
 
 # Organiser les graphiques en utilisant grid.arrange
-arrange_plots <- grid.arrange(plot1, plot2)
+arrange_plots <- grid.arrange(plot1, plot2,plot3)
+
+
 
 
 ####------ idem avec les gp+raph centrés/ réduits:
 
-# Fish_19602020$Fish_centre<- as.data.frame(scale(Fish_19602020$Fish))
-# Temp_19602020$Temp_year_centre<- as.data.frame(scale(Temp_19602020$meanyear))
-# data_centre<- merge(Fish_19602020[,c(1,3)], Temp_19602020[,c(1,15)], by = 'year')
-# data_centre<- data.table::as.data.table(data_centre)
-# data_centre<- as.data.frame(data_centre)
-# write.table(ninocentre,file="C:/Users/renax/Desktop/ACO/S9/Visualisation/Projet_Visu/Data/data_centree.csv")
-#colnames(ninocentre)<- c("year", 'fish','temp')
 
 ninocentre<-read.table("C:/Users/renax/Desktop/ACO/S9/Visualisation/Projet_Visu/Data/data_centree.csv")
 
 # data annees x temperature
 
-ninocentre %>% ggplot() + 
+fisherie_capture %>%filter(year <2021) %>%  ggplot() + 
   aes(x = year) +
+  # ajout des années el nino
+  geom_rect(aes(xmin = 1963, xmax = 1966, ymin = -Inf, ymax = Inf), 
+            fill = "#CCFFFF", alpha = 0.2)+
+  geom_rect(aes(xmin = 1968, xmax = 1969, ymin = -Inf, ymax = Inf), 
+            fill = "#CCFFFF", alpha = 0.2)+
+  geom_rect(aes(xmin = 1972, xmax = 1973, ymin = -Inf, ymax = Inf), 
+            fill = "#CCFFFF", alpha = 0.2)+
+  geom_rect(aes(xmin = 1976, xmax = 1980, ymin = -Inf, ymax = Inf), 
+            fill = "#CCFFFF", alpha = 0.2)+
+  geom_rect(aes(xmin = 1982, xmax = 1983, ymin = -Inf, ymax = Inf), 
+            fill = "#CCFFFF", alpha = 0.2)+
+  geom_rect(aes(xmin = 1986, xmax = 1987, ymin = -Inf, ymax = Inf), 
+            fill = "#CCFFFF", alpha = 0.2)+
+  geom_rect(aes(xmin = 1991, xmax = 1994, ymin = -Inf, ymax = Inf), 
+            fill = "#CCFFFF", alpha = 0.2)+
+  geom_rect(aes(xmin = 1997, xmax = 1998, ymin = -Inf, ymax = Inf), 
+            fill = "#CCFFFF", alpha = 0.2)+
+  geom_rect(aes(xmin = 2002, xmax = 2004, ymin = -Inf, ymax = Inf), 
+            fill = "#CCFFFF", alpha = 0.2)+
+  geom_rect(aes(xmin = 2009, xmax = 2010, ymin = -Inf, ymax = Inf), 
+            fill = "#CCFFFF", alpha = 0.2)+
+  geom_rect(aes(xmin = 2014, xmax = 2016, ymin = -Inf, ymax = Inf), 
+            fill = "#CCFFFF", alpha = 0.2)+
+  geom_rect(aes(xmin = 2019, xmax = 2020, ymin = -Inf, ymax = Inf), 
+            fill = "#CCFFFF", alpha = 0.2)+
+
   geom_line(aes(y = fish), color = "blue") +
-  geom_line(aes(y = temp), color = "red") +
+  # geom_line(aes(y = temp), color = "red") +
   geom_line(y = 0, linetype = "dashed", color = "black") +
-  geom_ribbon(data = subset(ninocentre, temp > 0), aes(ymin = 0, ymax = temp), 
-              fill = "blue", alpha = 0.5) +
-  geom_ribbon(data = subset(ninocentre, temp < 0), aes(ymin = temp, ymax = 0), 
-              fill = "pink", alpha = 0.5) +
+  #geom_ribbon(aes(ymin = 0, ymax = temp), fill = "pink", alpha = 0.5)+  # Zone colorée en rose sous la courbe rouge    theme_minimal()
+  labs(title=" Peche de capture au Pérou et anomalies de températures",
+       subtitle = " en tonne métrique",
+       x="",
+       y="")+
+
+  
+  
   theme_minimal()
 
 
