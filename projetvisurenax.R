@@ -81,40 +81,43 @@ arrange_plots <- grid.arrange(plot1, plot2,plot3)
 
 
 
-####------ idem avec les gp+raph centrés/ réduits:
+####------ GRAPH INITIAL
 
-
-ninocentre<-read.table("C:/Users/renax/Desktop/ACO/S9/Visualisation/Projet_Visu/Data/data_centree.csv")
+el_nino_years <- c(1963,1966, 1968,1969, 1972,1973, 1976, 1980, 1982,
+                   1983, 1986,1987, 1991, 1994, 1997,1998, 2002,2004, 
+                   2009,2010,2014, 2016, 2019,2020)
 
 # data annees x temperature
 
-fisherie_capture %>%filter(year <2021) %>%  ggplot() + 
-  aes(x = year) +
+fulltab %>%filter(year <2021) %>%  ggplot() + 
+  aes(x = year,y=fish) +
   # ajout des années el nino
-  geom_rect(aes(xmin = 1963, xmax = 1966, ymin = -Inf, ymax = Inf), 
-            fill = "#CCFFFF", alpha = 0.2)+
-  geom_rect(aes(xmin = 1968, xmax = 1969, ymin = -Inf, ymax = Inf), 
-            fill = "#CCFFFF", alpha = 0.2)+
-  geom_rect(aes(xmin = 1972, xmax = 1973, ymin = -Inf, ymax = Inf), 
-            fill = "#CCFFFF", alpha = 0.2)+
-  geom_rect(aes(xmin = 1976, xmax = 1980, ymin = -Inf, ymax = Inf), 
-            fill = "#CCFFFF", alpha = 0.2)+
-  geom_rect(aes(xmin = 1982, xmax = 1983, ymin = -Inf, ymax = Inf), 
-            fill = "#CCFFFF", alpha = 0.2)+
-  geom_rect(aes(xmin = 1986, xmax = 1987, ymin = -Inf, ymax = Inf), 
-            fill = "#CCFFFF", alpha = 0.2)+
-  geom_rect(aes(xmin = 1991, xmax = 1994, ymin = -Inf, ymax = Inf), 
-            fill = "#CCFFFF", alpha = 0.2)+
-  geom_rect(aes(xmin = 1997, xmax = 1998, ymin = -Inf, ymax = Inf), 
-            fill = "#CCFFFF", alpha = 0.2)+
-  geom_rect(aes(xmin = 2002, xmax = 2004, ymin = -Inf, ymax = Inf), 
-            fill = "#CCFFFF", alpha = 0.2)+
-  geom_rect(aes(xmin = 2009, xmax = 2010, ymin = -Inf, ymax = Inf), 
-            fill = "#CCFFFF", alpha = 0.2)+
-  geom_rect(aes(xmin = 2014, xmax = 2016, ymin = -Inf, ymax = Inf), 
-            fill = "#CCFFFF", alpha = 0.2)+
-  geom_rect(aes(xmin = 2019, xmax = 2020, ymin = -Inf, ymax = Inf), 
-            fill = "#CCFFFF", alpha = 0.2)+
+  geom_rect(aes(xmin = 1963, xmax = 1966, ymin = 1.2e7, ymax = 1.25e7),
+               fill = "pink", alpha = 0.2)+
+  geom_rect(aes(xmin = 1968, xmax = 1969, ymin = 1.2e7, ymax = 1.25e7),
+           fill = "pink", alpha = 0.2)+
+  geom_rect(aes(xmin = 1972, xmax = 1973, ymin = 1.2e7, ymax = 1.25e7), 
+            fill = "pink", alpha = 0.2)+
+  geom_rect(aes(xmin = 1976, xmax = 1980, ymin = 1.2e7, ymax = 1.25e7), 
+            fill = "pink", alpha = 0.2)+
+  geom_rect(aes(xmin = 1982, xmax = 1983, ymin = 1.2e7, ymax = 1.25e7), 
+            fill = "pink", alpha = 0.2)+
+  geom_rect(aes(xmin = 1986, xmax = 1987, ymin = 1.2e7, ymax = 1.25e7), 
+            fill = "pink", alpha = 0.2)+
+  geom_rect(aes(xmin = 1991, xmax = 1994, ymin = 1.2e7, ymax = 1.25e7), 
+            fill = "pink", alpha = 0.2)+
+  geom_rect(aes(xmin = 1997, xmax = 1998, ymin = 1.2e7, ymax = 1.25e7), 
+            fill = "pink", alpha = 0.2)+
+  geom_rect(aes(xmin = 2002, xmax = 2004, ymin = 1.2e7, ymax = 1.25e7), 
+            fill = "pink", alpha = 0.2)+
+  geom_rect(aes(xmin = 2009, xmax = 2010, ymin = 1.2e7, ymax = 1.25e7), 
+            fill = "pink", alpha = 0.2)+
+  geom_rect(aes(xmin = 2014, xmax = 2016, ymin = 1.2e7, ymax = 1.25e7), 
+            fill = "pink", alpha = 0.2)+
+  geom_rect(aes(xmin = 2019, xmax = 2020, ymin = 1.2e7, ymax = 1.25e7), 
+            fill = "pink", alpha = 0.2)+
+  # lignes des années el nino
+  geom_vline(xintercept = el_nino_years, linetype = "dotted", color = "darkred") +
 
   geom_line(aes(y = fish), color = "blue") +
   # geom_line(aes(y = temp), color = "red") +
@@ -128,6 +131,7 @@ fisherie_capture %>%filter(year <2021) %>%  ggplot() +
   
   
   theme_minimal()
+
 
 
 
