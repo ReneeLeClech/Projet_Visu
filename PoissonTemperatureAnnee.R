@@ -67,107 +67,56 @@ for (i in seq(0:60)) {
 }
 p<-l[[60]]
 
+p
 ###################
 
 p<-p+
   # ajout des ann?es el nino
   geom_rect(aes(xmin = 1963, xmax = 1966, ymin = 1.2e7, ymax = 1.25e7),
-            fill = "pink", alpha = 0.2)+
+            fill = "#9ecae1", alpha = 0.2)+
   geom_rect(aes(xmin = 1968, xmax = 1969, ymin = 1.2e7, ymax = 1.25e7),
-            fill = "pink", alpha = 0.2)+
+            fill = "#9ecae1", alpha = 0.2)+
   geom_rect(aes(xmin = 1972, xmax = 1973, ymin = 1.2e7, ymax = 1.25e7), 
-            fill = "pink", alpha = 0.2)+
+            fill = "#9ecae1", alpha = 0.2)+
   geom_rect(aes(xmin = 1976, xmax = 1980, ymin = 1.2e7, ymax = 1.25e7), 
-            fill = "pink", alpha = 0.2)+
+            fill = "#9ecae1", alpha = 0.2)+
   geom_rect(aes(xmin = 1982, xmax = 1983, ymin = 1.2e7, ymax = 1.25e7), 
-            fill = "pink", alpha = 0.2)+
+            fill = "#9ecae1", alpha = 0.2)+
   geom_rect(aes(xmin = 1986, xmax = 1987, ymin = 1.2e7, ymax = 1.25e7), 
-            fill = "pink", alpha = 0.2)+
+            fill = "#9ecae1", alpha = 0.2)+
   geom_rect(aes(xmin = 1991, xmax = 1994, ymin = 1.2e7, ymax = 1.25e7), 
-            fill = "pink", alpha = 0.2)+
+            fill = "#9ecae1", alpha = 0.2)+
   geom_rect(aes(xmin = 1997, xmax = 1998, ymin = 1.2e7, ymax = 1.25e7), 
-            fill = "pink", alpha = 0.2)+
+            fill = "#9ecae1", alpha = 0.2)+
   geom_rect(aes(xmin = 2002, xmax = 2004, ymin = 1.2e7, ymax = 1.25e7), 
-            fill = "pink", alpha = 0.2)+
+            fill = "#9ecae1", alpha = 0.2)+
   geom_rect(aes(xmin = 2009, xmax = 2010, ymin = 1.2e7, ymax = 1.25e7), 
-            fill = "pink", alpha = 0.2)+
+            fill = "#9ecae1", alpha = 0.2)+
   geom_rect(aes(xmin = 2014, xmax = 2016, ymin = 1.2e7, ymax = 1.25e7), 
-            fill = "pink", alpha = 0.2)+
+            fill = "#9ecae1", alpha = 0.2)+
   geom_rect(aes(xmin = 2019, xmax = 2020, ymin = 1.2e7, ymax = 1.25e7), 
-            fill = "pink", alpha = 0.2)+
+            fill = "#9ecae1", alpha = 0.2)+
   # lignes des ann?es el nino
-  geom_vline(xintercept = el_nino_years, linetype = "dotted", color = "darkred") +
+  geom_vline(xintercept = el_nino_years, linetype = "dotted", color = "darkblue") +
   
-  geom_line(aes(y = fish), color = "blue") +
+  geom_line(aes(y = fish), color = "black") +
   # geom_line(aes(y = temp), color = "red") +
-  geom_line(y = 0, linetype = "dashed", color = "black") +
   labs(title=" Peche de capture au Pérou et anomalies de températures entre 1960 et 2020",
      subtitle = " ",
      x="",
      y="tonne métrique")+
   labs(caption = "Source pêche de capture: www.worldbank.org \n Source température: www.weatherandclimate")+
-  theme_minimal()
+  theme_classic()+  
+  theme(plot.title = element_text(size=10,face="bold",hjust=0),
+                          plot.caption = element_text(face="italic", hjust=1,size=8),
+                          axis.title = element_text(size= 9))
 
-plot1<-p
+p
+
+
+# plot1<-p
 
 #############################
 ###########################
 
-# Spécifiez la largeur et la hauteur souhaitées en pouces
-options(repr.plot.width = 1, repr.plot.height = 6)
-
-# Créez le graphique avec les dimensions spécifiées
-plot2 <- ggplot() +
-  geom_tile(aes(x = 1, y = seq(1, 9), fill = legend_colors), height = 1, width = 0.01) +
-  scale_fill_identity() +
-  theme_void() +
-  theme(legend.position = "right") +
-  guides(fill = guide_legend(title = "Température", keywidth = 1, keyheight = 0.5,
-                             override.aes = list(color = "black"),
-                             label.theme = element_text(size = 8))) +
-  annotate("text", x = 1, y = seq(1, 9), label = legend_labels, vjust = 1, hjust = 0)
-plot2
-
-
-
-# Créer un graphique de la légende
-legend_colors <- color_palette
-legend_labels <- c(paste("-Inf -", round(thresholds[1], 2)," °C"),
-                   paste(round(thresholds[1], 2), "-", round(thresholds[2], 2)," °C"),
-                   paste(round(thresholds[2], 2), "-", round(thresholds[3], 2)," °C"),
-                   paste(round(thresholds[3], 2), "-", round(thresholds[4], 2)," °C"),
-                   paste(round(thresholds[4], 2), "-", round(thresholds[5], 2)," °C"),
-                   paste(round(thresholds[5], 2), "-", round(thresholds[6], 2)," °C"),
-                   paste(round(thresholds[6], 2), "-", round(thresholds[7], 2)," °C"),
-                   paste(round(thresholds[7], 2), "-", round(thresholds[8], 2)," °C"),
-                   paste(round(thresholds[8], 2), "-", "+Inf"," °C"))
-
-legend_df <- data.frame(legend_colors, legend_labels)
-
-
-plot2<- ggplot() +
-  geom_tile(aes(x = 1, y = seq(1, 9), fill = legend_colors), height = 1, width = 0.01) +
-  scale_fill_identity() +
-  theme_void() +
-  theme(legend.position = "right") +
-  guides(fill = guide_legend(title = "Température", keywidth = 1, keyheight = 0.5,
-                             override.aes = list(color = "black"),
-                             label.theme = element_text(size = 8))) +
-  annotate("text", x = 1, y = seq(1, 9), label = legend_labels, vjust = 1, hjust = 0)
-
-
-
-
-plot2
-
-# Convertir les graphiques en objets grob
-grobplot1 <- ggplotGrob(plot1)
-grobplot2 <- ggplotGrob(plot2)
-
-# Organiser les graphiques en utilisant grid.arrange
-arrange_plots <- grid.arrange(
-  grobplot1,grobplot2,
-  ncol = 2, widths = c(5, 1)
-)
-pri
 
