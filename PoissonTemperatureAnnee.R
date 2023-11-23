@@ -119,4 +119,16 @@ p
 #############################
 ###########################
 
+ggplot(filtered_data, aes(x = year, y = fish))+
+  geom_line(aes(y = fish), color = "black") +
+  # geom_line(aes(y = temp), color = "red") +
+  labs(title=" Peche de capture au Pérou et anomalies de températures entre 1960 et 2020",
+       subtitle = " ",
+       x="",
+       y="tonne métrique")+
+  labs(caption = "Source pêche de capture: www.worldbank.org \n Source température: www.weatherandclimate")+
+  theme_classic()+  
+  theme(plot.title = element_text(size=10,face="bold",hjust=0),
+        plot.caption = element_text(face="italic", hjust=1,size=8),
+        axis.title = element_text(size= 9))
 
